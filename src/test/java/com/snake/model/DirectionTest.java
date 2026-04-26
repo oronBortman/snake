@@ -4,6 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
 
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -14,14 +15,19 @@ import org.junit.jupiter.params.provider.MethodSource;
 @DisplayName("Direction")
 class DirectionTest {
 
-    private static final Position aRandomPosition = new Position(5, 5);
+    private static int randomCoordinate() {
+        return ThreadLocalRandom.current().nextInt(1, 100);
+    }
 
     static Stream<Arguments> movementCases() {
+        final var x = randomCoordinate();
+        final var y = randomCoordinate();
+        final var base = new Position(x, y);
         return Stream.of(
-            Arguments.of(Direction.UP, new Position(5, 4)),
-            Arguments.of(Direction.DOWN, new Position(5, 6)),
-            Arguments.of(Direction.LEFT, new Position(4, 5)),
-            Arguments.of(Direction.RIGHT, new Position(6, 5))
+            Arguments.of(Direction.UP, base, new Position(x, y - 1)),
+            Arguments.of(Direction.DOWN, base, new Position(x, y + 1)),
+            Arguments.of(Direction.LEFT, base, new Position(x - 1, y)),
+            Arguments.of(Direction.RIGHT, base, new Position(x + 1, y))
         );
     }
 
@@ -37,8 +43,8 @@ class DirectionTest {
     @ParameterizedTest
     @DisplayName("each direction moves position by the correct delta")
     @MethodSource("movementCases")
-    void eachDirectionMovesPositionByCorrectDelta(final Direction direction, final Position expected) {
-        final var result = direction.apply(aRandomPosition);
+    void eachDirectionMovesPositionByCorrectDelta(final Direction direction, final Position base, final Position expected) {
+        final var result = direction.apply(base);
 
         assertThat(result, equalTo(expected));
     }
