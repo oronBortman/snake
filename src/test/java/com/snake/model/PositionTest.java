@@ -10,20 +10,18 @@ import org.junit.jupiter.api.Test;
 @DisplayName("Position")
 class PositionTest {
 
+    private static final Position aRandomPosition = new Position(3, 7);
+
     @Test
     @DisplayName("stores the x coordinate")
     void storesTheXCoordinate() {
-        final var position = new Position(3, 7);
-
-        assertThat(position.x(), equalTo(3));
+        assertThat(aRandomPosition.x(), equalTo(3));
     }
 
     @Test
     @DisplayName("stores the y coordinate")
     void storesTheYCoordinate() {
-        final var position = new Position(3, 7);
-
-        assertThat(position.y(), equalTo(7));
+        assertThat(aRandomPosition.y(), equalTo(7));
     }
 
     @Test

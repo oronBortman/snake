@@ -4,72 +4,56 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
 
+import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.EnumSource;
+import org.junit.jupiter.params.provider.MethodSource;
 
 @DisplayName("Direction")
 class DirectionTest {
 
-    @Test
-    @DisplayName("UP moves y by -1 and keeps x unchanged")
-    void upMovesYByMinusOne() {
-        final var start = new Position(5, 5);
+    private static final Position aRandomPosition = new Position(5, 5);
 
-        final var result = Direction.UP.apply(start);
-
-        assertThat(result, equalTo(new Position(5, 4)));
+    static Stream<Arguments> movementCases() {
+        return Stream.of(
+            Arguments.of(Direction.UP, new Position(5, 4)),
+            Arguments.of(Direction.DOWN, new Position(5, 6)),
+            Arguments.of(Direction.LEFT, new Position(4, 5)),
+            Arguments.of(Direction.RIGHT, new Position(6, 5))
+        );
     }
 
-    @Test
-    @DisplayName("DOWN moves y by +1 and keeps x unchanged")
-    void downMovesYByPlusOne() {
-        final var start = new Position(5, 5);
-
-        final var result = Direction.DOWN.apply(start);
-
-        assertThat(result, equalTo(new Position(5, 6)));
+    static Stream<Arguments> oppositePairs() {
+        return Stream.of(
+            Arguments.of(Direction.UP, Direction.DOWN),
+            Arguments.of(Direction.DOWN, Direction.UP),
+            Arguments.of(Direction.LEFT, Direction.RIGHT),
+            Arguments.of(Direction.RIGHT, Direction.LEFT)
+        );
     }
 
-    @Test
-    @DisplayName("LEFT moves x by -1 and keeps y unchanged")
-    void leftMovesXByMinusOne() {
-        final var start = new Position(5, 5);
+    @ParameterizedTest
+    @DisplayName("each direction moves position by the correct delta")
+    @MethodSource("movementCases")
+    void eachDirectionMovesPositionByCorrectDelta(final Direction direction, final Position expected) {
+        final var result = direction.apply(aRandomPosition);
 
-        final var result = Direction.LEFT.apply(start);
-
-        assertThat(result, equalTo(new Position(4, 5)));
+        assertThat(result, equalTo(expected));
     }
 
-    @Test
-    @DisplayName("RIGHT moves x by +1 and keeps y unchanged")
-    void rightMovesXByPlusOne() {
-        final var start = new Position(5, 5);
-
-        final var result = Direction.RIGHT.apply(start);
-
-        assertThat(result, equalTo(new Position(6, 5)));
+    @ParameterizedTest
+    @DisplayName("each direction returns the correct opposite")
+    @MethodSource("oppositePairs")
+    void eachDirectionReturnsCorrectOpposite(final Direction direction, final Direction expectedOpposite) {
+        assertThat(direction.opposite(), equalTo(expectedOpposite));
     }
 
-    @Test
-    @DisplayName("UP and DOWN are opposites")
-    void upAndDownAreOpposites() {
-        assertThat(Direction.UP.opposite(), equalTo(Direction.DOWN));
-        assertThat(Direction.DOWN.opposite(), equalTo(Direction.UP));
-    }
-
-    @Test
-    @DisplayName("LEFT and RIGHT are opposites")
-    void leftAndRightAreOpposites() {
-        assertThat(Direction.LEFT.opposite(), equalTo(Direction.RIGHT));
-        assertThat(Direction.RIGHT.opposite(), equalTo(Direction.LEFT));
-    }
-
-    @Test
+    @ParameterizedTest
     @DisplayName("no direction is its own opposite")
-    void noDirectionIsItsOwnOpposite() {
-        assertThat(Direction.UP.opposite(), not(equalTo(Direction.UP)));
-        assertThat(Direction.DOWN.opposite(), not(equalTo(Direction.DOWN)));
-        assertThat(Direction.LEFT.opposite(), not(equalTo(Direction.LEFT)));
-        assertThat(Direction.RIGHT.opposite(), not(equalTo(Direction.RIGHT)));
+    @EnumSource(Direction.class)
+    void noDirectionIsItsOwnOpposite(final Direction direction) {
+        assertThat(direction.opposite(), not(equalTo(direction)));
     }
 }
