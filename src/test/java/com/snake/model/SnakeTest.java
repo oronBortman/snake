@@ -21,14 +21,20 @@ class SnakeTest {
     @DisplayName("head is at the starting position")
     void headIsAtStartingPosition() {
         final var start = randomPosition();
-        assertThat(snakeWith(start).head(), equalTo(start));
+
+        final var snake = snakeWith(start);
+
+        assertThat(snake.head(), equalTo(start));
     }
 
     @Test
     @DisplayName("starts with one body segment at the starting position")
     void startsWithOneBodySegmentAtStartingPosition() {
         final var start = randomPosition();
-        assertThat(snakeWith(start).body(), contains(start));
+
+        final var snake = snakeWith(start);
+
+        assertThat(snake.body(), contains(start));
     }
 
     @Test
@@ -37,7 +43,9 @@ class SnakeTest {
         final var start = randomPosition();
         final var direction = randomDirection();
         final var snake = snakeWith(start);
+
         snake.move(direction);
+
         assertThat(snake.head(), equalTo(positionAfterStep(start, direction)));
     }
 
@@ -46,7 +54,9 @@ class SnakeTest {
     void oldTailIsRemovedAfterMove() {
         final var start = randomPosition();
         final var snake = snakeWith(start);
+
         snake.move(randomDirection());
+
         assertThat(snake.body(), not(hasItem(start)));
     }
 
@@ -54,7 +64,9 @@ class SnakeTest {
     @DisplayName("size is unchanged after move")
     void sizeIsUnchangedAfterMove() {
         final var snake = randomSnake();
+
         snake.move(randomDirection());
+
         assertThat(snake.size(), equalTo(1));
     }
 
@@ -62,8 +74,10 @@ class SnakeTest {
     @DisplayName("each grow call adds exactly one segment")
     void eachGrowCallAddsExactlyOneSegment() {
         final var snake = randomSnake();
+
         snake.grow(randomDirection());
         assertThat(snake.size(), equalTo(2));
+
         snake.grow(randomDirection());
         assertThat(snake.size(), equalTo(3));
     }
@@ -74,7 +88,9 @@ class SnakeTest {
         final var start = randomPosition();
         final var direction = randomDirection();
         final var snake = snakeWith(start);
+
         snake.grow(direction);
+
         assertThat(snake.head(), equalTo(positionAfterStep(start, direction)));
         assertThat(snake.body().getLast(), equalTo(start));
     }
