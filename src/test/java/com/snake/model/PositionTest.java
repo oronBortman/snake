@@ -1,10 +1,10 @@
 package com.snake.model;
 
+import static com.snake.model.TestData.randomCoordinate;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
 
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,10 +14,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 @DisplayName("Position")
 class PositionTest {
-
-    private static int randomCoordinate() {
-        return ThreadLocalRandom.current().nextInt(0, 1000);
-    }
 
     static Stream<Arguments> positionsWithDifferentCoordinates() {
         final var x = randomCoordinate();
