@@ -2,32 +2,22 @@ package com.snake.model;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.not;
 
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.MethodSource;
 
 @DisplayName("Direction")
 class DirectionTest {
 
-    private static int randomCoordinate() {
-        return ThreadLocalRandom.current().nextInt(1, 100);
-    }
-
-    static Stream<Arguments> movementCases() {
-        final var x = randomCoordinate();
-        final var y = randomCoordinate();
-        final var base = new Position(x, y);
+    static Stream<Arguments> deltaValues() {
         return Stream.of(
-            Arguments.of(Direction.UP, base, new Position(x, y - 1)),
-            Arguments.of(Direction.DOWN, base, new Position(x, y + 1)),
-            Arguments.of(Direction.LEFT, base, new Position(x - 1, y)),
-            Arguments.of(Direction.RIGHT, base, new Position(x + 1, y))
+            Arguments.of(Direction.UP, 0, -1),
+            Arguments.of(Direction.DOWN, 0, 1),
+            Arguments.of(Direction.LEFT, -1, 0),
+            Arguments.of(Direction.RIGHT, 1, 0)
         );
     }
 
@@ -41,12 +31,11 @@ class DirectionTest {
     }
 
     @ParameterizedTest
-    @DisplayName("each direction moves position by the correct delta")
-    @MethodSource("movementCases")
-    void eachDirectionMovesPositionByCorrectDelta(final Direction direction, final Position base, final Position expected) {
-        final var result = direction.apply(base);
-
-        assertThat(result, equalTo(expected));
+    @DisplayName("each direction has the correct movement delta")
+    @MethodSource("deltaValues")
+    void eachDirectionHasCorrectMovementDelta(final Direction direction, final int expectedDx, final int expectedDy) {
+        assertThat(direction.dx, equalTo(expectedDx));
+        assertThat(direction.dy, equalTo(expectedDy));
     }
 
     @ParameterizedTest
@@ -56,10 +45,4 @@ class DirectionTest {
         assertThat(direction.opposite(), equalTo(expectedOpposite));
     }
 
-    @ParameterizedTest
-    @DisplayName("no direction is its own opposite")
-    @EnumSource(Direction.class)
-    void noDirectionIsItsOwnOpposite(final Direction direction) {
-        assertThat(direction.opposite(), not(equalTo(direction)));
-    }
 }

@@ -1,52 +1,26 @@
 package com.snake.model;
 
+import java.util.Map;
+
 public enum Direction {
-    UP {
-        @Override
-        public Position apply(final Position position) {
-            return new Position(position.x(), position.y() - 1);
-        }
+    UP(0, -1),
+    DOWN(0, 1),
+    LEFT(-1, 0),
+    RIGHT(1, 0);
 
-        @Override
-        public Direction opposite() {
-            return DOWN;
-        }
-    },
-    DOWN {
-        @Override
-        public Position apply(final Position position) {
-            return new Position(position.x(), position.y() + 1);
-        }
+    public final int dx;
+    public final int dy;
 
-        @Override
-        public Direction opposite() {
-            return UP;
-        }
-    },
-    LEFT {
-        @Override
-        public Position apply(final Position position) {
-            return new Position(position.x() - 1, position.y());
-        }
+    Direction(final int dx, final int dy) {
+        this.dx = dx;
+        this.dy = dy;
+    }
 
-        @Override
-        public Direction opposite() {
-            return RIGHT;
-        }
-    },
-    RIGHT {
-        @Override
-        public Position apply(final Position position) {
-            return new Position(position.x() + 1, position.y());
-        }
+    public Direction opposite() {
+        return OPPOSITES.get(this);
+    }
 
-        @Override
-        public Direction opposite() {
-            return LEFT;
-        }
-    };
-
-    public abstract Position apply(Position position);
-
-    public abstract Direction opposite();
+    private static final Map<Direction, Direction> OPPOSITES = Map.of(
+        UP, DOWN, DOWN, UP, LEFT, RIGHT, RIGHT, LEFT
+    );
 }
