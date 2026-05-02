@@ -4,7 +4,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
 
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,13 +14,9 @@ import org.junit.jupiter.params.provider.MethodSource;
 @DisplayName("Position")
 class PositionTest {
 
-    private static int randomCoordinate() {
-        return ThreadLocalRandom.current().nextInt(0, 1000);
-    }
-
     static Stream<Arguments> positionsWithDifferentCoordinates() {
-        final var x = randomCoordinate();
-        final var y = randomCoordinate();
+        final var x = TestData.randomCoordinate();
+        final var y = TestData.randomCoordinate();
         return Stream.of(
             Arguments.of(new Position(x, y), new Position(x + 1, y)),
             Arguments.of(new Position(x, y), new Position(x, y + 1))
@@ -31,24 +26,24 @@ class PositionTest {
     @Test
     @DisplayName("stores the x coordinate")
     void storesTheXCoordinate() {
-        final var x = randomCoordinate();
-        final var position = new Position(x, randomCoordinate());
+        final var x = TestData.randomCoordinate();
+        final var position = new Position(x, TestData.randomCoordinate());
         assertThat(position.x(), equalTo(x));
     }
 
     @Test
     @DisplayName("stores the y coordinate")
     void storesTheYCoordinate() {
-        final var y = randomCoordinate();
-        final var position = new Position(randomCoordinate(), y);
+        final var y = TestData.randomCoordinate();
+        final var position = new Position(TestData.randomCoordinate(), y);
         assertThat(position.y(), equalTo(y));
     }
 
     @Test
     @DisplayName("two positions with the same coordinates are equal")
     void twoPositionsWithTheSameCoordinatesAreEqual() {
-        final var x = randomCoordinate();
-        final var y = randomCoordinate();
+        final var x = TestData.randomCoordinate();
+        final var y = TestData.randomCoordinate();
         assertThat(new Position(x, y), equalTo(new Position(x, y)));
     }
 
@@ -62,8 +57,8 @@ class PositionTest {
     @Test
     @DisplayName("equality is symmetric")
     void equalityIsSymmetric() {
-        final var x = randomCoordinate();
-        final var y = randomCoordinate();
+        final var x = TestData.randomCoordinate();
+        final var y = TestData.randomCoordinate();
         final var a = new Position(x, y);
         final var b = new Position(x, y);
         assertThat(a.equals(b), equalTo(b.equals(a)));
