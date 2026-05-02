@@ -121,8 +121,8 @@ class SnakeTest {
         final var start = randomPosition();
         final var direction = randomDirection();
         final var snake = snakeWith(start);
-        snake.grow();
 
+        snake.grow();
         snake.move(direction);
 
         assertThat(snake.head(), equalTo(positionAfterStep(start, direction)));
