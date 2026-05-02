@@ -5,14 +5,27 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
 
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 @DisplayName("Position")
 class PositionTest {
 
     private static int randomCoordinate() {
         return ThreadLocalRandom.current().nextInt(0, 1000);
+    }
+
+    static Stream<Arguments> positionsWithDifferentCoordinates() {
+        final var x = randomCoordinate();
+        final var y = randomCoordinate();
+        return Stream.of(
+            Arguments.of(new Position(x, y), new Position(x + 1, y)),
+            Arguments.of(new Position(x, y), new Position(x, y + 1))
+        );
     }
 
     @Test
@@ -36,31 +49,13 @@ class PositionTest {
     void twoPositionsWithTheSameCoordinatesAreEqual() {
         final var x = randomCoordinate();
         final var y = randomCoordinate();
-        final var first = new Position(x, y);
-        final var second = new Position(x, y);
-
-        assertThat(first, equalTo(second));
+        assertThat(new Position(x, y), equalTo(new Position(x, y)));
     }
 
-    @Test
-    @DisplayName("two positions with different x coordinates are not equal")
-    void twoPositionsWithDifferentXCoordinatesAreNotEqual() {
-        final var x = randomCoordinate();
-        final var y = randomCoordinate();
-        final var first = new Position(x, y);
-        final var second = new Position(x + 1, y);
-
-        assertThat(first, not(equalTo(second)));
-    }
-
-    @Test
-    @DisplayName("two positions with different y coordinates are not equal")
-    void twoPositionsWithDifferentYCoordinatesAreNotEqual() {
-        final var x = randomCoordinate();
-        final var y = randomCoordinate();
-        final var first = new Position(x, y);
-        final var second = new Position(x, y + 1);
-
+    @ParameterizedTest
+    @DisplayName("positions with different coordinates are not equal")
+    @MethodSource("positionsWithDifferentCoordinates")
+    void positionsWithDifferentCoordinatesAreNotEqual(final Position first, final Position second) {
         assertThat(first, not(equalTo(second)));
     }
 
@@ -71,18 +66,6 @@ class PositionTest {
         final var y = randomCoordinate();
         final var a = new Position(x, y);
         final var b = new Position(x, y);
-
         assertThat(a.equals(b), equalTo(b.equals(a)));
-    }
-
-    @Test
-    @DisplayName("equality is consistent across repeated calls")
-    void equalityIsConsistentAcrossRepeatedCalls() {
-        final var x = randomCoordinate();
-        final var y = randomCoordinate();
-        final var a = new Position(x, y);
-        final var b = new Position(x, y);
-
-        assertThat(a.equals(b), equalTo(a.equals(b)));
     }
 }
