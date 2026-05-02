@@ -17,7 +17,7 @@ public class Snake {
         body.removeLast();
     }
 
-    public void eat(final Direction direction) {
+    public void grow(final Direction direction) {
         body.addFirst(nextHead(direction));
     }
 

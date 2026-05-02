@@ -59,30 +59,30 @@ class SnakeTest {
     }
 
     @Test
-    @DisplayName("size increases by 1 after eat")
-    void sizeIncreasesByOneAfterEat() {
+    @DisplayName("size increases by 1 after grow")
+    void sizeIncreasesByOneAfterGrow() {
         final var snake = randomSnake();
-        snake.eat(randomDirection());
+        snake.grow(randomDirection());
         assertThat(snake.size(), equalTo(2));
     }
 
     @Test
-    @DisplayName("each eat call adds exactly one segment")
-    void eachEatCallAddsExactlyOneSegment() {
+    @DisplayName("each grow call adds exactly one segment")
+    void eachGrowCallAddsExactlyOneSegment() {
         final var snake = randomSnake();
-        snake.eat(randomDirection());
+        snake.grow(randomDirection());
         assertThat(snake.size(), equalTo(2));
-        snake.eat(randomDirection());
+        snake.grow(randomDirection());
         assertThat(snake.size(), equalTo(3));
     }
 
     @Test
-    @DisplayName("body segments are in correct spatial order after eat")
-    void bodySegmentsAreInCorrectSpatialOrderAfterEat() {
+    @DisplayName("body segments are in correct spatial order after grow")
+    void bodySegmentsAreInCorrectSpatialOrderAfterGrow() {
         final var start = randomPosition();
         final var direction = randomDirection();
         final var snake = snakeWith(start);
-        snake.eat(direction);
+        snake.grow(direction);
         assertThat(snake.head(), equalTo(positionAfterStep(start, direction)));
         assertThat(snake.body().getLast(), equalTo(start));
     }
