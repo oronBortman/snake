@@ -13,4 +13,21 @@ final class TestData {
     static Position randomPosition() {
         return new Position(randomCoordinate(), randomCoordinate());
     }
+
+    static Direction randomDirection() {
+        final var values = Direction.values();
+        return values[ThreadLocalRandom.current().nextInt(values.length)];
+    }
+
+    static Snake randomSnake() {
+        return new Snake(randomPosition(), randomDirection());
+    }
+
+    static Snake snakeAt(final Position start) {
+        return new Snake(start, randomDirection());
+    }
+
+    static Snake snakeMoving(final Direction direction) {
+        return new Snake(randomPosition(), direction);
+    }
 }

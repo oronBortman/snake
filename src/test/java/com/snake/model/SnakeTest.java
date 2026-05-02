@@ -1,6 +1,10 @@
 package com.snake.model;
 
+import static com.snake.model.TestData.randomDirection;
 import static com.snake.model.TestData.randomPosition;
+import static com.snake.model.TestData.randomSnake;
+import static com.snake.model.TestData.snakeAt;
+import static com.snake.model.TestData.snakeMoving;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.equalTo;
@@ -17,7 +21,7 @@ class SnakeTest {
     @DisplayName("head is at the starting position")
     void headIsAtStartingPosition() {
         final var start = randomPosition();
-        final var snake = new Snake(start, Direction.RIGHT);
+        final var snake = snakeAt(start);
         assertThat(snake.head(), equalTo(start));
     }
 
@@ -25,14 +29,14 @@ class SnakeTest {
     @DisplayName("starts with one body segment at the starting position")
     void startsWithOneBodySegmentAtStartingPosition() {
         final var start = randomPosition();
-        final var snake = new Snake(start, Direction.RIGHT);
+        final var snake = snakeAt(start);
         assertThat(snake.body(), contains(start));
     }
 
     @Test
     @DisplayName("reports the correct initial direction")
     void reportsCorrectInitialDirection() {
-        final var snake = new Snake(randomPosition(), Direction.UP);
+        final var snake = snakeMoving(Direction.UP);
         assertThat(snake.direction(), equalTo(Direction.UP));
     }
 
@@ -49,7 +53,7 @@ class SnakeTest {
     @DisplayName("old tail is removed after move")
     void oldTailIsRemovedAfterMove() {
         final var start = randomPosition();
-        final var snake = new Snake(start, Direction.RIGHT);
+        final var snake = snakeAt(start);
         snake.move();
         assertThat(snake.body(), not(hasItem(start)));
     }
@@ -57,7 +61,7 @@ class SnakeTest {
     @Test
     @DisplayName("size is unchanged after move")
     void sizeIsUnchangedAfterMove() {
-        final var snake = new Snake(randomPosition(), Direction.DOWN);
+        final var snake = randomSnake();
         snake.move();
         assertThat(snake.size(), equalTo(1));
     }
@@ -65,7 +69,7 @@ class SnakeTest {
     @Test
     @DisplayName("size increases by 1 after grow then move")
     void sizeIncreasesByOneAfterGrowThenMove() {
-        final var snake = new Snake(randomPosition(), Direction.RIGHT);
+        final var snake = randomSnake();
         snake.grow();
         snake.move();
         assertThat(snake.size(), equalTo(2));
@@ -74,7 +78,7 @@ class SnakeTest {
     @Test
     @DisplayName("each grow call adds exactly one segment on the next move")
     void eachGrowCallAddsExactlyOneSegment() {
-        final var snake = new Snake(randomPosition(), Direction.RIGHT);
+        final var snake = randomSnake();
         snake.grow();
         snake.grow();
         snake.move();
@@ -97,7 +101,7 @@ class SnakeTest {
     @Test
     @DisplayName("adopts new direction when change is valid")
     void adoptsNewDirectionWhenValid() {
-        final var snake = new Snake(randomPosition(), Direction.RIGHT);
+        final var snake = snakeMoving(Direction.RIGHT);
         snake.changeDirection(Direction.UP);
         assertThat(snake.direction(), equalTo(Direction.UP));
     }
@@ -105,7 +109,7 @@ class SnakeTest {
     @Test
     @DisplayName("ignores direction change that would reverse into itself")
     void ignoresReversalDirectionChange() {
-        final var snake = new Snake(randomPosition(), Direction.RIGHT);
+        final var snake = snakeMoving(Direction.RIGHT);
         snake.changeDirection(Direction.LEFT);
         assertThat(snake.direction(), equalTo(Direction.RIGHT));
     }
@@ -113,7 +117,7 @@ class SnakeTest {
     @Test
     @DisplayName("direction is unchanged after an ignored input")
     void directionUnchangedAfterIgnoredInput() {
-        final var snake = new Snake(randomPosition(), Direction.UP);
+        final var snake = snakeMoving(Direction.UP);
         snake.changeDirection(Direction.DOWN);
         assertThat(snake.direction(), equalTo(Direction.UP));
     }
