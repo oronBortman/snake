@@ -32,6 +32,10 @@ final class TestData {
         return new Snake(randomPosition(), direction);
     }
 
+    static Position positionAfterStep(final Position from, final Direction direction) {
+        return new Position(from.x() + direction.dx, from.y() + direction.dy);
+    }
+
     static Direction randomValidChangeFrom(final Direction current) {
         final var valid = Arrays.stream(Direction.values())
             .filter(d -> !d.equals(current) && !d.equals(current.opposite()))

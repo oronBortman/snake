@@ -1,5 +1,6 @@
 package com.snake.model;
 
+import static com.snake.model.TestData.positionAfterStep;
 import static com.snake.model.TestData.randomDirection;
 import static com.snake.model.TestData.randomPosition;
 import static com.snake.model.TestData.randomSnake;
@@ -48,7 +49,7 @@ class SnakeTest {
         final var direction = randomDirection();
         final var snake = new Snake(start, direction);
         snake.move();
-        assertThat(snake.head(), equalTo(new Position(start.x() + direction.dx, start.y() + direction.dy)));
+        assertThat(snake.head(), equalTo(positionAfterStep(start, direction)));
     }
 
     @Test
@@ -97,7 +98,7 @@ class SnakeTest {
         final var snake = new Snake(start, direction);
         snake.grow();
         snake.move();
-        assertThat(snake.head(), equalTo(new Position(start.x() + direction.dx, start.y() + direction.dy)));
+        assertThat(snake.head(), equalTo(positionAfterStep(start, direction)));
         assertThat(snake.body().getLast(), equalTo(start));
     }
 
