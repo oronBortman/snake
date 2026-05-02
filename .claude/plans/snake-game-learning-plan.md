@@ -141,29 +141,29 @@ The iron law: **NO production code without a failing test first.**
 **Goal**: Compile and run a test before writing any game code.
 **Test first**: A single dummy test that asserts `true` — just to prove the test runner works.
 **Acceptance criteria**:
-- [ ] `pom.xml` exists with JUnit 5 + Hamcrest dependencies
-- [ ] Maven directory structure in place (`src/main/java`, `src/test/java`)
-- [ ] `mvn test` runs and passes
+- [x] `pom.xml` exists with JUnit 5 + Hamcrest dependencies
+- [x] Maven directory structure in place (`src/main/java`, `src/test/java`)
+- [x] `mvn test` runs and passes
 
 ---
 
 #### Task 1 — `Position`: value object
 **Behaviour**: Represents a coordinate on the board. Two positions at the same location are equal.
 **Acceptance criteria**:
-- [ ] Stores an x and a y coordinate
-- [ ] Two positions with the same x and y are considered equal
-- [ ] Two positions with different coordinates are not equal
-- [ ] Equality is symmetric and consistent (a.equals(b) == b.equals(a))
+- [x] Stores an x and a y coordinate
+- [x] Two positions with the same x and y are considered equal
+- [x] Two positions with different coordinates are not equal
+- [x] Equality is symmetric and consistent (a.equals(b) == b.equals(a))
 
 ---
 
 #### Task 2 — `Direction`: movement enum
 **Behaviour**: Represents the four directions a snake can move. Each direction knows how it changes position. A direction knows its opposite.
 **Acceptance criteria**:
-- [ ] Four directions exist: UP, DOWN, LEFT, RIGHT
-- [ ] Each direction produces a predictable position change (e.g. UP moves y by -1, DOWN by +1)
-- [ ] UP and DOWN are opposites; LEFT and RIGHT are opposites
-- [ ] No direction is its own opposite
+- [x] Four directions exist: UP, DOWN, LEFT, RIGHT
+- [x] Each direction produces a predictable position change (e.g. UP moves y by -1, DOWN by +1)
+- [x] UP and DOWN are opposites; LEFT and RIGHT are opposites
+- [x] No direction is its own opposite
 
 ---
 
