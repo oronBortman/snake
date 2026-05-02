@@ -105,11 +105,11 @@ class SnakeTest {
     }
 
     @Test
-    @DisplayName("size is retained after grow then move")
+    @DisplayName("size is retained after grows then move")
     void sizeIsRetainedAfterGrowThenMove() {
         final var snake = randomSnake();
-        snake.grow();
 
+        snake.grow();
         snake.move(randomDirection());
 
         assertThat(snake.size(), equalTo(2));
