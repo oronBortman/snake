@@ -1,6 +1,7 @@
 package com.snake.model;
 
 import java.util.ArrayDeque;
+import java.util.Deque;
 
 public class Snake {
 
@@ -31,7 +32,7 @@ public class Snake {
         return body.getFirst();
     }
 
-    public ArrayDeque<Position> body() {
+    public Deque<Position> body() {
         return body;
     }
 

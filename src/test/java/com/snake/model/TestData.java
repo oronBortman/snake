@@ -1,6 +1,5 @@
 package com.snake.model;
 
-import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
 
 final class TestData {
