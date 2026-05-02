@@ -71,6 +71,29 @@ class SnakeTest {
     }
 
     @Test
+    @DisplayName("tail of a multi-segment snake is removed after move")
+    void tailOfMultiSegmentSnakeIsRemovedAfterMove() {
+        final var start = randomPosition();
+        final var snake = snakeWith(start);
+        snake.grow(randomDirection());
+
+        snake.move(randomDirection());
+
+        assertThat(snake.body(), not(hasItem(start)));
+    }
+
+    @Test
+    @DisplayName("size is retained after grow then move")
+    void sizeIsRetainedAfterGrowThenMove() {
+        final var snake = randomSnake();
+        snake.grow(randomDirection());
+
+        snake.move(randomDirection());
+
+        assertThat(snake.size(), equalTo(2));
+    }
+
+    @Test
     @DisplayName("each grow call adds exactly one segment")
     void eachGrowCallAddsExactlyOneSegment() {
         final var snake = randomSnake();

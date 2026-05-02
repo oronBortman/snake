@@ -5,7 +5,7 @@ import java.util.Deque;
 
 public class Snake {
 
-    private final ArrayDeque<Position> body;
+    private final Deque<Position> body;
 
     public Snake(final Position start) {
         this.body = new ArrayDeque<>();
