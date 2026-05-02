@@ -32,6 +32,10 @@ final class TestData {
         return new Snake(randomPosition(), direction);
     }
 
+    static Snake snakeWith(final Position start, final Direction direction) {
+        return new Snake(start, direction);
+    }
+
     static Position positionAfterStep(final Position from, final Direction direction) {
         return new Position(from.x() + direction.dx, from.y() + direction.dy);
     }

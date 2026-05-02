@@ -47,7 +47,7 @@ class SnakeTest {
     void headMovesOneStepInCurrentDirection() {
         final var start = randomPosition();
         final var direction = randomDirection();
-        final var snake = new Snake(start, direction);
+        final var snake = snakeWith(start, direction);
         snake.move();
         assertThat(snake.head(), equalTo(positionAfterStep(start, direction)));
     }
@@ -95,7 +95,7 @@ class SnakeTest {
     void bodySegmentsAreInCorrectSpatialOrderAfterGrowth() {
         final var start = randomPosition();
         final var direction = randomDirection();
-        final var snake = new Snake(start, direction);
+        final var snake = snakeWith(start, direction);
         snake.grow();
         snake.move();
         assertThat(snake.head(), equalTo(positionAfterStep(start, direction)));
