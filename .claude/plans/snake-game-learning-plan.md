@@ -167,40 +167,40 @@ The iron law: **NO production code without a failing test first.**
 
 ---
 
-#### Task 3 — `Snake`: initialization
-**Behaviour**: A new snake starts at a given position facing a given direction, with a body of exactly one segment.
+#### Task 3 — `Snake`: initialization ✅
+**Behaviour**: A new snake starts at a given position with a body of exactly one segment. The snake has no direction — the caller decides direction at move time.
 **Acceptance criteria**:
-- [ ] Snake starts with one body segment at the given starting position
-- [ ] Snake's head is at the starting position
-- [ ] Snake reports the correct initial direction
-- [ ] Snake's size is 1
+- [x] Snake starts with one body segment at the given starting position
+- [x] Snake's head is at the starting position
 
 ---
 
-#### Task 4 — `Snake`: movement
-**Behaviour**: When the snake moves, its head advances one step in the current direction and its tail is removed. The body length stays the same.
+#### Task 4 — `Snake`: movement ✅
+**Behaviour**: When told to move in a direction, the snake's head advances one step and its tail is removed. The body length stays the same.
 **Acceptance criteria**:
-- [ ] Head is at the new position after moving
-- [ ] Old tail position is no longer part of the body
-- [ ] Size is unchanged after moving
+- [x] Head moves one step in the given direction after move(Direction)
+- [x] Old tail position is no longer part of the body after move(Direction)
+- [x] Size is unchanged after move(Direction)
+- [x] Tail of a multi-segment snake is removed after move(Direction)
 
 ---
 
-#### Task 5 — `Snake`: growth
-**Behaviour**: When the snake grows, its next move retains the tail instead of removing it. Size increases by exactly one.
+#### Task 5 — `Snake`: growth ✅
+**Behaviour**: When told to grow, the snake adds one segment at its tail. The head does not move. The snake has no awareness of food — the engine calls grow() when it determines food was consumed.
 **Acceptance criteria**:
-- [ ] Size increases by 1 after growing and then moving
-- [ ] Body segments are in the correct spatial order after growth
-- [ ] Each grow call adds exactly one segment on the next move
+- [x] grow() does not move the head
+- [x] grow() adds one segment at the tail
+- [x] Each grow() call adds exactly one segment
+- [x] Size is retained after grow() then move()
+- [x] Body is in correct spatial order after grow() then move()
 
 ---
 
-#### Task 6 — `Snake`: direction change
-**Behaviour**: The snake can change direction, but cannot reverse into itself. Invalid direction changes are silently ignored.
+#### Task 6 — `GameEngine`: direction change
+**Behaviour**: Direction change handling lives in the GameEngine. The engine tracks the current direction and rejects reversal attempts before passing a direction to Snake.move(). Originally scoped as a Snake responsibility — moved here because Snake is direction-agnostic.
 **Acceptance criteria**:
-- [ ] Snake adopts the new direction when the change is valid
-- [ ] Snake moving RIGHT ignores a LEFT direction change
-- [ ] Snake moving UP ignores a DOWN direction change
+- [ ] Engine adopts the new direction when the change is valid
+- [ ] Engine ignores a direction change that would reverse into the current direction
 - [ ] Direction is unchanged after an ignored input
 
 ---
