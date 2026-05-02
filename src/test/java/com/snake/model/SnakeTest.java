@@ -2,6 +2,7 @@ package com.snake.model;
 
 import static com.snake.model.TestData.randomPosition;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.not;
@@ -18,6 +19,14 @@ class SnakeTest {
         final var start = randomPosition();
         final var snake = new Snake(start, Direction.RIGHT);
         assertThat(snake.head(), equalTo(start));
+    }
+
+    @Test
+    @DisplayName("starts with one body segment at the starting position")
+    void startsWithOneBodySegmentAtStartingPosition() {
+        final var start = randomPosition();
+        final var snake = new Snake(start, Direction.RIGHT);
+        assertThat(snake.body(), contains(start));
     }
 
     @Test
