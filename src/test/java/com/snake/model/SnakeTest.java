@@ -59,14 +59,6 @@ class SnakeTest {
     }
 
     @Test
-    @DisplayName("size increases by 1 after grow")
-    void sizeIncreasesByOneAfterGrow() {
-        final var snake = randomSnake();
-        snake.grow(randomDirection());
-        assertThat(snake.size(), equalTo(2));
-    }
-
-    @Test
     @DisplayName("each grow call adds exactly one segment")
     void eachGrowCallAddsExactlyOneSegment() {
         final var snake = randomSnake();
