@@ -21,29 +21,14 @@ final class TestData {
     }
 
     static Snake randomSnake() {
-        return new Snake(randomPosition(), randomDirection());
+        return new Snake(randomPosition());
     }
 
     static Snake snakeWith(final Position start) {
-        return new Snake(start, randomDirection());
-    }
-
-    static Snake snakeWith(final Direction direction) {
-        return new Snake(randomPosition(), direction);
-    }
-
-    static Snake snakeWith(final Position start, final Direction direction) {
-        return new Snake(start, direction);
+        return new Snake(start);
     }
 
     static Position positionAfterStep(final Position from, final Direction direction) {
         return new Position(from.x() + direction.dx, from.y() + direction.dy);
-    }
-
-    static Direction randomValidChangeFrom(final Direction current) {
-        final var valid = Arrays.stream(Direction.values())
-            .filter(d -> !d.equals(current) && !d.equals(current.opposite()))
-            .toList();
-        return valid.get(ThreadLocalRandom.current().nextInt(valid.size()));
     }
 }

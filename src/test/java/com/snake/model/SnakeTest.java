@@ -4,7 +4,6 @@ import static com.snake.model.TestData.positionAfterStep;
 import static com.snake.model.TestData.randomDirection;
 import static com.snake.model.TestData.randomPosition;
 import static com.snake.model.TestData.randomSnake;
-import static com.snake.model.TestData.randomValidChangeFrom;
 import static com.snake.model.TestData.snakeWith;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
@@ -22,33 +21,23 @@ class SnakeTest {
     @DisplayName("head is at the starting position")
     void headIsAtStartingPosition() {
         final var start = randomPosition();
-        final var snake = snakeWith(start);
-        assertThat(snake.head(), equalTo(start));
+        assertThat(snakeWith(start).head(), equalTo(start));
     }
 
     @Test
     @DisplayName("starts with one body segment at the starting position")
     void startsWithOneBodySegmentAtStartingPosition() {
         final var start = randomPosition();
-        final var snake = snakeWith(start);
-        assertThat(snake.body(), contains(start));
+        assertThat(snakeWith(start).body(), contains(start));
     }
 
     @Test
-    @DisplayName("reports the correct initial direction")
-    void reportsCorrectInitialDirection() {
-        final var direction = randomDirection();
-        final var snake = snakeWith(direction);
-        assertThat(snake.direction(), equalTo(direction));
-    }
-
-    @Test
-    @DisplayName("head moves one step in current direction after move")
-    void headMovesOneStepInCurrentDirection() {
+    @DisplayName("head moves one step in the given direction after move")
+    void headMovesOneStepInGivenDirection() {
         final var start = randomPosition();
         final var direction = randomDirection();
-        final var snake = snakeWith(start, direction);
-        snake.move();
+        final var snake = snakeWith(start);
+        snake.move(direction);
         assertThat(snake.head(), equalTo(positionAfterStep(start, direction)));
     }
 
@@ -57,7 +46,7 @@ class SnakeTest {
     void oldTailIsRemovedAfterMove() {
         final var start = randomPosition();
         final var snake = snakeWith(start);
-        snake.move();
+        snake.move(randomDirection());
         assertThat(snake.body(), not(hasItem(start)));
     }
 
@@ -65,68 +54,36 @@ class SnakeTest {
     @DisplayName("size is unchanged after move")
     void sizeIsUnchangedAfterMove() {
         final var snake = randomSnake();
-        snake.move();
+        snake.move(randomDirection());
         assertThat(snake.size(), equalTo(1));
     }
 
     @Test
-    @DisplayName("size increases by 1 after grow then move")
-    void sizeIncreasesByOneAfterGrowThenMove() {
+    @DisplayName("size increases by 1 after eat")
+    void sizeIncreasesByOneAfterEat() {
         final var snake = randomSnake();
-        snake.grow();
-        snake.move();
+        snake.eat(randomDirection());
         assertThat(snake.size(), equalTo(2));
     }
 
     @Test
-    @DisplayName("each grow call adds exactly one segment on the next move")
-    void eachGrowCallAddsExactlyOneSegment() {
+    @DisplayName("each eat call adds exactly one segment")
+    void eachEatCallAddsExactlyOneSegment() {
         final var snake = randomSnake();
-        snake.grow();
-        snake.grow();
-        snake.move();
+        snake.eat(randomDirection());
         assertThat(snake.size(), equalTo(2));
-        snake.move();
+        snake.eat(randomDirection());
         assertThat(snake.size(), equalTo(3));
     }
 
     @Test
-    @DisplayName("body segments are in correct spatial order after growth")
-    void bodySegmentsAreInCorrectSpatialOrderAfterGrowth() {
+    @DisplayName("body segments are in correct spatial order after eat")
+    void bodySegmentsAreInCorrectSpatialOrderAfterEat() {
         final var start = randomPosition();
         final var direction = randomDirection();
-        final var snake = snakeWith(start, direction);
-        snake.grow();
-        snake.move();
+        final var snake = snakeWith(start);
+        snake.eat(direction);
         assertThat(snake.head(), equalTo(positionAfterStep(start, direction)));
         assertThat(snake.body().getLast(), equalTo(start));
-    }
-
-    @Test
-    @DisplayName("adopts new direction when change is valid")
-    void adoptsNewDirectionWhenValid() {
-        final var direction = randomDirection();
-        final var snake = snakeWith(direction);
-        final var validChange = randomValidChangeFrom(direction);
-        snake.changeDirection(validChange);
-        assertThat(snake.direction(), equalTo(validChange));
-    }
-
-    @Test
-    @DisplayName("ignores direction change that would reverse into itself")
-    void ignoresReversalDirectionChange() {
-        final var direction = randomDirection();
-        final var snake = snakeWith(direction);
-        snake.changeDirection(direction.opposite());
-        assertThat(snake.direction(), equalTo(direction));
-    }
-
-    @Test
-    @DisplayName("direction is unchanged after an ignored input")
-    void directionUnchangedAfterIgnoredInput() {
-        final var direction = randomDirection();
-        final var snake = snakeWith(direction);
-        snake.changeDirection(direction.opposite());
-        assertThat(snake.direction(), equalTo(direction));
     }
 }
