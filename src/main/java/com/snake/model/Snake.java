@@ -6,30 +6,33 @@ public class Snake {
 
     private final ArrayDeque<Position> body;
     private Direction direction;
-    private int pendingGrowth;
+    private int segmentsToAdd;
 
     public Snake(final Position start, final Direction direction) {
         this.body = new ArrayDeque<>();
         this.body.addFirst(start);
         this.direction = direction;
-        this.pendingGrowth = 0;
+        this.segmentsToAdd = 0;
     }
 
     public void move() {
-        final var newHead = new Position(
-            body.getFirst().x() + direction.dx,
-            body.getFirst().y() + direction.dy
-        );
-        body.addFirst(newHead);
-        if (pendingGrowth > 0) {
-            pendingGrowth--;
+        body.addFirst(nextHead());
+        if (segmentsToAdd > 0) {
+            segmentsToAdd--;
         } else {
             body.removeLast();
         }
     }
 
     public void grow() {
-        pendingGrowth++;
+        segmentsToAdd++;
+    }
+
+    private Position nextHead() {
+        return new Position(
+            body.getFirst().x() + direction.dx,
+            body.getFirst().y() + direction.dy
+        );
     }
 
     public void changeDirection(final Direction newDirection) {
