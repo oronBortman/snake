@@ -1,5 +1,6 @@
 package com.snake.model;
 
+import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
 
 final class TestData {
@@ -29,5 +30,12 @@ final class TestData {
 
     static Snake snakeWith(final Direction direction) {
         return new Snake(randomPosition(), direction);
+    }
+
+    static Direction randomValidChangeFrom(final Direction current) {
+        final var valid = Arrays.stream(Direction.values())
+            .filter(d -> !d.equals(current) && !d.equals(current.opposite()))
+            .toList();
+        return valid.get(ThreadLocalRandom.current().nextInt(valid.size()));
     }
 }

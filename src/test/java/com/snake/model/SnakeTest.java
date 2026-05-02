@@ -3,6 +3,7 @@ package com.snake.model;
 import static com.snake.model.TestData.randomDirection;
 import static com.snake.model.TestData.randomPosition;
 import static com.snake.model.TestData.randomSnake;
+import static com.snake.model.TestData.randomValidChangeFrom;
 import static com.snake.model.TestData.snakeWith;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
@@ -35,8 +36,9 @@ class SnakeTest {
     @Test
     @DisplayName("reports the correct initial direction")
     void reportsCorrectInitialDirection() {
-        final var snake = snakeWith(Direction.UP);
-        assertThat(snake.direction(), equalTo(Direction.UP));
+        final var direction = randomDirection();
+        final var snake = snakeWith(direction);
+        assertThat(snake.direction(), equalTo(direction));
     }
 
     @Test
@@ -102,24 +104,28 @@ class SnakeTest {
     @Test
     @DisplayName("adopts new direction when change is valid")
     void adoptsNewDirectionWhenValid() {
-        final var snake = snakeWith(Direction.RIGHT);
-        snake.changeDirection(Direction.UP);
-        assertThat(snake.direction(), equalTo(Direction.UP));
+        final var direction = randomDirection();
+        final var snake = snakeWith(direction);
+        final var validChange = randomValidChangeFrom(direction);
+        snake.changeDirection(validChange);
+        assertThat(snake.direction(), equalTo(validChange));
     }
 
     @Test
     @DisplayName("ignores direction change that would reverse into itself")
     void ignoresReversalDirectionChange() {
-        final var snake = snakeWith(Direction.RIGHT);
-        snake.changeDirection(Direction.LEFT);
-        assertThat(snake.direction(), equalTo(Direction.RIGHT));
+        final var direction = randomDirection();
+        final var snake = snakeWith(direction);
+        snake.changeDirection(direction.opposite());
+        assertThat(snake.direction(), equalTo(direction));
     }
 
     @Test
     @DisplayName("direction is unchanged after an ignored input")
     void directionUnchangedAfterIgnoredInput() {
-        final var snake = snakeWith(Direction.UP);
-        snake.changeDirection(Direction.DOWN);
-        assertThat(snake.direction(), equalTo(Direction.UP));
+        final var direction = randomDirection();
+        final var snake = snakeWith(direction);
+        snake.changeDirection(direction.opposite());
+        assertThat(snake.direction(), equalTo(direction));
     }
 }
