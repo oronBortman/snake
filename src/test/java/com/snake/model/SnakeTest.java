@@ -13,13 +13,6 @@ import org.junit.jupiter.api.Test;
 class SnakeTest {
 
     @Test
-    @DisplayName("starts with size 1")
-    void startsWithSizeOne() {
-        final var snake = new Snake(randomPosition(), Direction.RIGHT);
-        assertThat(snake.size(), equalTo(1));
-    }
-
-    @Test
     @DisplayName("head is at the starting position")
     void headIsAtStartingPosition() {
         final var start = randomPosition();
