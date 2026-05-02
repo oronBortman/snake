@@ -2,7 +2,9 @@ package com.snake.model;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-class TestData {
+final class TestData {
+
+    private TestData() {}
 
     static int randomCoordinate() {
         return ThreadLocalRandom.current().nextInt(1, 100);
