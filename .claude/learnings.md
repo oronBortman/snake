@@ -125,3 +125,51 @@ originSessionId: 14da0b73-34c5-44eb-9897-ae12b5e2d7c0
 - Issues and plan must reflect current design — stale descriptions mislead future work
 - Close issues only after the PR is merged, not when implementation is complete on the branch
 - Review comments on issues should be deleted when they become inaccurate
+
+---
+
+## Pre-Task Design Protocol (Born From Phase 1 Mistakes)
+
+The `eat(Direction)` → `grow(Direction)` → `grow()` journey cost test rewrites, multiple commits, and back-and-forth. All of it could have been resolved in the plan phase. Use this protocol before writing any code for a new class or method.
+
+### Step 1 — Map Responsibility Boundaries
+
+For every class involved in the task, write one sentence:
+> "This class knows: ___ and is responsible for: ___"
+
+If that sentence contains "and also", split the class. This is what would have caught `Snake` storing direction — the sentence becomes "Snake knows its body **and also the last direction the engine chose**", which immediately signals engine concern leaked into Snake.
+
+### Step 2 — Interrogate Every Method Parameter
+
+For each planned method, ask:
+- **"Where does this value come from?"** — the object that owns it is the one that should pass it, not receive it
+- **"Would this method make sense if the object didn't know about X?"** — if yes, X doesn't belong as a parameter
+- **"Can this object compute this itself, or does it require outside knowledge?"** — if outside knowledge, the method is in the wrong place
+
+This is the question that would have killed `grow(Direction)` immediately: the snake has no food or direction state, so why would grow need a direction?
+
+### Step 3 — Name Before You Code
+
+Write the method call in plain English before writing the body:
+- `snake.eat(direction)` → "does the snake know about food?" → no → wrong name, wrong responsibility
+- `snake.grow()` → "is growing a body operation?" → yes → correct
+
+**Rule:** if a method name borrows a concept from another object (food → eat, board → collide, engine → reverse), that's a signal the responsibility is misplaced. Fix the name, and the design follows.
+
+### Step 4 — Ask "What Would Have to Change?"
+
+Pick one likely future requirement and trace the impact:
+> "If we change how food is placed, which objects need to change?"
+
+If the answer includes objects that logically shouldn't care (e.g., Snake changes because food logic changed), the design is leaky. Good boundaries mean each change ripples only within the object that owns that concern.
+
+### Questions to Ask Claude at the Start of Each Task
+
+Before writing any code:
+1. "For each class in this task, what does it know and what is it responsible for — write one sentence per class."
+2. "For each planned method, does every parameter make sense strictly from this object's perspective?"
+3. "Are any of the method names borrowing a concept from another object?"
+4. "If I change [one requirement], which objects would need to change — does that make sense?"
+5. "Show me a minimal skeleton with signatures only — no bodies — and let's validate the design before implementing."
+
+Resolving these in the plan phase costs minutes. Resolving them after tests are written costs hours.
