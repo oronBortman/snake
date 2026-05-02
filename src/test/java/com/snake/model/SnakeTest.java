@@ -71,26 +71,25 @@ class SnakeTest {
     }
 
     @Test
-    @DisplayName("tail of a multi-segment snake is removed after move")
-    void tailOfMultiSegmentSnakeIsRemovedAfterMove() {
+    @DisplayName("grow does not move the head")
+    void growDoesNotMoveHead() {
         final var start = randomPosition();
         final var snake = snakeWith(start);
-        snake.grow(randomDirection());
 
-        snake.move(randomDirection());
+        snake.grow();
 
-        assertThat(snake.body(), not(hasItem(start)));
+        assertThat(snake.head(), equalTo(start));
     }
 
     @Test
-    @DisplayName("size is retained after grow then move")
-    void sizeIsRetainedAfterGrowThenMove() {
-        final var snake = randomSnake();
-        snake.grow(randomDirection());
+    @DisplayName("grow adds one segment at the tail")
+    void growAddsOneSegmentAtTail() {
+        final var start = randomPosition();
+        final var snake = snakeWith(start);
 
-        snake.move(randomDirection());
+        snake.grow();
 
-        assertThat(snake.size(), equalTo(2));
+        assertThat(snake.body(), contains(start, start));
     }
 
     @Test
@@ -98,21 +97,33 @@ class SnakeTest {
     void eachGrowCallAddsExactlyOneSegment() {
         final var snake = randomSnake();
 
-        snake.grow(randomDirection());
+        snake.grow();
         assertThat(snake.size(), equalTo(2));
 
-        snake.grow(randomDirection());
+        snake.grow();
         assertThat(snake.size(), equalTo(3));
     }
 
     @Test
-    @DisplayName("body segments are in correct spatial order after grow")
-    void bodySegmentsAreInCorrectSpatialOrderAfterGrow() {
+    @DisplayName("size is retained after grow then move")
+    void sizeIsRetainedAfterGrowThenMove() {
+        final var snake = randomSnake();
+        snake.grow();
+
+        snake.move(randomDirection());
+
+        assertThat(snake.size(), equalTo(2));
+    }
+
+    @Test
+    @DisplayName("body is in correct spatial order after grow then move")
+    void bodyIsInCorrectSpatialOrderAfterGrowThenMove() {
         final var start = randomPosition();
         final var direction = randomDirection();
         final var snake = snakeWith(start);
+        snake.grow();
 
-        snake.grow(direction);
+        snake.move(direction);
 
         assertThat(snake.head(), equalTo(positionAfterStep(start, direction)));
         assertThat(snake.body().getLast(), equalTo(start));
