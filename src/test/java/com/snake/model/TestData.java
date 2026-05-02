@@ -23,11 +23,11 @@ final class TestData {
         return new Snake(randomPosition(), randomDirection());
     }
 
-    static Snake snakeAt(final Position start) {
+    static Snake snakeWith(final Position start) {
         return new Snake(start, randomDirection());
     }
 
-    static Snake snakeMoving(final Direction direction) {
+    static Snake snakeWith(final Direction direction) {
         return new Snake(randomPosition(), direction);
     }
 }

@@ -3,8 +3,7 @@ package com.snake.model;
 import static com.snake.model.TestData.randomDirection;
 import static com.snake.model.TestData.randomPosition;
 import static com.snake.model.TestData.randomSnake;
-import static com.snake.model.TestData.snakeAt;
-import static com.snake.model.TestData.snakeMoving;
+import static com.snake.model.TestData.snakeWith;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.equalTo;
@@ -21,7 +20,7 @@ class SnakeTest {
     @DisplayName("head is at the starting position")
     void headIsAtStartingPosition() {
         final var start = randomPosition();
-        final var snake = snakeAt(start);
+        final var snake = snakeWith(start);
         assertThat(snake.head(), equalTo(start));
     }
 
@@ -29,14 +28,14 @@ class SnakeTest {
     @DisplayName("starts with one body segment at the starting position")
     void startsWithOneBodySegmentAtStartingPosition() {
         final var start = randomPosition();
-        final var snake = snakeAt(start);
+        final var snake = snakeWith(start);
         assertThat(snake.body(), contains(start));
     }
 
     @Test
     @DisplayName("reports the correct initial direction")
     void reportsCorrectInitialDirection() {
-        final var snake = snakeMoving(Direction.UP);
+        final var snake = snakeWith(Direction.UP);
         assertThat(snake.direction(), equalTo(Direction.UP));
     }
 
@@ -44,16 +43,17 @@ class SnakeTest {
     @DisplayName("head moves one step in current direction after move")
     void headMovesOneStepInCurrentDirection() {
         final var start = randomPosition();
-        final var snake = new Snake(start, Direction.RIGHT);
+        final var direction = randomDirection();
+        final var snake = new Snake(start, direction);
         snake.move();
-        assertThat(snake.head(), equalTo(new Position(start.x() + 1, start.y())));
+        assertThat(snake.head(), equalTo(new Position(start.x() + direction.dx, start.y() + direction.dy)));
     }
 
     @Test
     @DisplayName("old tail is removed after move")
     void oldTailIsRemovedAfterMove() {
         final var start = randomPosition();
-        final var snake = snakeAt(start);
+        final var snake = snakeWith(start);
         snake.move();
         assertThat(snake.body(), not(hasItem(start)));
     }
@@ -91,17 +91,18 @@ class SnakeTest {
     @DisplayName("body segments are in correct spatial order after growth")
     void bodySegmentsAreInCorrectSpatialOrderAfterGrowth() {
         final var start = randomPosition();
-        final var snake = new Snake(start, Direction.RIGHT);
+        final var direction = randomDirection();
+        final var snake = new Snake(start, direction);
         snake.grow();
         snake.move();
-        assertThat(snake.head(), equalTo(new Position(start.x() + 1, start.y())));
+        assertThat(snake.head(), equalTo(new Position(start.x() + direction.dx, start.y() + direction.dy)));
         assertThat(snake.body().getLast(), equalTo(start));
     }
 
     @Test
     @DisplayName("adopts new direction when change is valid")
     void adoptsNewDirectionWhenValid() {
-        final var snake = snakeMoving(Direction.RIGHT);
+        final var snake = snakeWith(Direction.RIGHT);
         snake.changeDirection(Direction.UP);
         assertThat(snake.direction(), equalTo(Direction.UP));
     }
@@ -109,7 +110,7 @@ class SnakeTest {
     @Test
     @DisplayName("ignores direction change that would reverse into itself")
     void ignoresReversalDirectionChange() {
-        final var snake = snakeMoving(Direction.RIGHT);
+        final var snake = snakeWith(Direction.RIGHT);
         snake.changeDirection(Direction.LEFT);
         assertThat(snake.direction(), equalTo(Direction.RIGHT));
     }
@@ -117,7 +118,7 @@ class SnakeTest {
     @Test
     @DisplayName("direction is unchanged after an ignored input")
     void directionUnchangedAfterIgnoredInput() {
-        final var snake = snakeMoving(Direction.UP);
+        final var snake = snakeWith(Direction.UP);
         snake.changeDirection(Direction.DOWN);
         assertThat(snake.direction(), equalTo(Direction.UP));
     }
